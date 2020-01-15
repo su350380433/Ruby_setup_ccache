@@ -1,0 +1,43 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, "8.0"
+
+#inhibit_all_warnings!
+#use_frameworks!
+
+workspace 'MTHawkeye'
+
+def hawkeye
+  #< Only used during Debug
+  #< Since the podfile dependency doesn't support environment configuration, 
+  #< the dependent pods also need to be explicitly configured as Debug.
+  
+  eval(File.read(File.join(__dir__, 'ccache.rb')), binding)
+
+  pod 'MTHawkeye/DefaultPlugins', :path => '../'#, :configurations => 'Debug'
+
+  pod 'FLEX'#, :configurations => ['Debug']
+  pod 'FBRetainCycleDetector'#, :configurations => ['Debug']
+  pod 'fishhook'#, :configurations => ['Debug']
+  pod 'CocoaLumberjack'#, :configurations => ['Debug'] # CocoaLumberjack is optional, change to `MTHawkeye/DefaultPluginsWithoutLog` if don't need.
+  pod 'MTGLDebug'#, :configurations => ['Debug'] # MTGLDebug is exclude by default, change `MTHawkeye` to `MTHawkeye/DefaultPlugins` to include.
+
+  pod 'MTAppenderFile', '~> 0.4.0'#, :configurations => ['Debug'], :inhibit_warnings => false
+end
+
+target 'MTHawkeyeDemo' do
+
+  project 'MTHawkeyeDemo'
+
+  hawkeye
+
+  pod 'AFNetworking', :inhibit_warnings => true
+
+  target 'MTHawkeyeDemoTests' do
+      pod 'AGAsyncTestHelper/Shorthand', :inhibit_warnings => true
+      pod 'GYHttpMock', :inhibit_warnings => true
+  end
+
+end
+
+
