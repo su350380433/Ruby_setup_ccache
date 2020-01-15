@@ -73,15 +73,10 @@ def setup_ccache(enable_ccache)
     
     if ENV['WORKSPACE']
       path = get_main_workspace
-      puts "path = #{path}"
       workspace = Xcodeproj::Workspace.new_from_xcworkspace(path)
-      puts "workspace = #{workspace}"
       workspace.file_references.each do |ref|
-           puts "ref = #{ref}"
         xcodeproj_path = File.join(ENV['WORKSPACE'], ref.path)
-            puts "xcodeproj_path = #{xcodeproj_path}"
         project = Xcodeproj::Project.open(xcodeproj_path)
-           puts "project = #{project}"
         set_ccache_for_project(
           project, ENV["cc_path"], ENV["cxx_path"], enable_ccache
         )
